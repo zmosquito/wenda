@@ -77,6 +77,11 @@ spring.datasource.password=
 ![createrWebSpringboot](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/createrWebSpringboot.png)
 
 - 登录与注册
+
+引入了`ticket`的概念，在用户登陆之后，后台会自动产生一个ticket，然后放入数据库中，`ticket`是具有时效性的，通过保存的过期时间与当前服务器时间进行对比，如果过期了，就需要重新登陆，如果没有过期就会直接是登录状态。这里的`ticket`在服务器发送给客户端后保存在`Cookie`中
+
+在进行登陆注册的时候保存当前用户访问的网址，在登陆或注册完成后直接跳回操作的网址，提升用户的体验。
+
 - 敏感词过滤
 - 异步
 - 邮件发送
