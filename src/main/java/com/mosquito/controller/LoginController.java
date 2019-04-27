@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
+ * 用户登陆注册
  */
 @Controller
 public class LoginController {

@@ -16,11 +16,17 @@ import java.util.Map;
  */
 @Service
 public class SearchService {
-    private static final String SOLR_URL = "http://127.0.0.1:8983/solr/wenda";
-    private HttpSolrClient client = new HttpSolrClient.Builder(SOLR_URL).build();
+    private static final String SOLR_URL = "http://127.0.0.1:8983/solr/wenda";  //指定的solr请求地址
+    private HttpSolrClient client = new HttpSolrClient.Builder(SOLR_URL).build();  //构建一个solr client
     private static final String QUESTION_TITLE_FIELD = "question_title";
     private static final String QUESTION_CONTENT_FIELD = "question_content";
 
+    /**
+     * @Author mosquito
+     * @Description //TODO
+     * @Param [keyword, offset, count, hlPre, hlPos]
+     * @return java.util.List<com.mosquito.model.Question>
+     **/
     public List<Question> searchQuestion(String keyword, int offset, int count,
                                          String hlPre, String hlPos) throws Exception {
         List<Question> questionList = new ArrayList<>();

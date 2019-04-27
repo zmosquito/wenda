@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 处理所有问题的请求
  */
 @Controller
 public class QuestionController {
@@ -91,6 +92,15 @@ public class QuestionController {
         return "detail";
     }
 
+    /**
+     * @Author mosquito
+     * @Description
+     *
+     * 添加题目（判断用户是否登录）
+     *
+     * @Param [title, content]
+     * @return java.lang.String
+     **/
     @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
     public String addQuestion(@RequestParam("title") String title, @RequestParam("content") String content) {
@@ -99,12 +109,16 @@ public class QuestionController {
             question.setContent(content);
             question.setCreatedDate(new Date());
             question.setTitle(title);
+
+            /* 未登录 */
             if (hostHolder.getUser() == null) {
                 question.setUserId(WendaUtil.ANONYMOUS_USERID);
                 // return WendaUtil.getJSONString(999);
             } else {
                 question.setUserId(hostHolder.getUser().getId());
             }
+
+            /* 添加成功 */
             if (questionService.addQuestion(question) > 0) {
                 eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
                         .setActorId(question.getUserId()).setEntityId(question.getId())

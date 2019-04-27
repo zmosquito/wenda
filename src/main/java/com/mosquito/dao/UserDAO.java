@@ -5,6 +5,12 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
+ * User 的持久层
+ * 1.添加User
+ * 2.根据 id 查找 User
+ * 3.根据 name 查找 User
+ * 4.更新密码
+ * 5.根据 id 删除 User
  */
 @Repository
 @Mapper

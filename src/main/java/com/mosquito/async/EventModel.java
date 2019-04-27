@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 事件模型
  */
 public class EventModel {
     private EventType type;
-    private int actorId;
+    private int actorId; //触发者
     private int entityType;
     private int entityId;
     private int entityOwnerId;

@@ -5,6 +5,8 @@
     <sql id="table">question</sql>
     <sql id="selectFields">id, title, content, comment_count,created_date,user_id
     </sql>
+
+    <!-- 动态SQl：查找最后一个发布的问题 -->
     <select id="selectLatestQuestions" resultType="com.mosquito.model.Question">
         SELECT
         <include refid="selectFields"/>

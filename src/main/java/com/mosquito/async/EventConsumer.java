@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- */
+ * 处理所有事件
+ * */
 @Service
 public class EventConsumer implements InitializingBean, ApplicationContextAware {
     private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
@@ -27,13 +28,21 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
     @Autowired
     JedisAdapter jedisAdapter;
 
+    /*
+     * @Author mosquito
+     * @Description 初始化参数
+     * @Param []
+     * @return void
+     **/
     @Override
     public void afterPropertiesSet() throws Exception {
         Map<String, EventHandler> beans = applicationContext.getBeansOfType(EventHandler.class);
         if (beans != null) {
+            // 从容器中取出所有的eventHandler
             for (Map.Entry<String, EventHandler> entry : beans.entrySet()) {
                 List<EventType> eventTypes = entry.getValue().getSupportEventTypes();
 
+                //注册event
                 for (EventType type : eventTypes) {
                     if (!config.containsKey(type)) {
                         config.put(type, new ArrayList<EventHandler>());
@@ -43,6 +52,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
             }
         }
 
+        // 多线程处理event
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -55,12 +65,14 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                             continue;
                         }
 
+                        // 解析eventModel
                         EventModel eventModel = JSON.parseObject(message, EventModel.class);
                         if (!config.containsKey(eventModel.getType())) {
                             logger.error("不能识别的事件");
                             continue;
                         }
 
+                        // 放到对应的handler处理
                         for (EventHandler handler : config.get(eventModel.getType())) {
                             handler.doHandle(eventModel);
                         }

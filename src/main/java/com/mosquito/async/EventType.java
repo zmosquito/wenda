@@ -1,6 +1,7 @@
 package com.mosquito.async;
 
 /**
+ * 事件类型
  */
 public enum EventType {
     LIKE(0),

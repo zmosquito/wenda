@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 点赞 handler 实现eventHandler接口
  */
 @Component
 public class LikeHandler implements EventHandler {

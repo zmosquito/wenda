@@ -23,6 +23,7 @@ public class QuestionService {
     }
 
     public int addQuestion(Question question) {
+        /* 过滤 HTML 标签 */
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
         question.setContent(HtmlUtils.htmlEscape(question.getContent()));
         // 敏感词过滤
