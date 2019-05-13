@@ -372,10 +372,77 @@ public class LikeHandler implements EventHandler {
 
 - 邮件发送
 
+邮件发送倒也是第一次接触，好像以前看 Java 老师的是有提到过，不过当时也不会写。这里还是引用的是官方的`javax.mail`包，然后是通过`Spring`进行调用，这样可以减少一些邮件发送的复杂度，毕竟很多时候这种固定套路的代码都是复制过来用的。
 
+流程: 
+
+- 定义一个发送邮件的配置文件，里面写好相关的配置，包括服务器信息、邮件协议、账号信息等等。
+- 在 bean 中写一个方法`sendWithHTMLTemplate()`用来发送邮件的，因为不可能每一个邮件都是一样的，这里是采用了`Velocity`进行生成邮件文本的。
+- 在需要调用发送邮件的地方调用`sendWithHTMLTemplate()`发送邮件。
+
+示例代码：
 
 - Redis事务
+
+以前只知道在关系型数据库里面是有事务的概念的，没想到在 Redis 中也是有事务的概念的.很多时候一些重要的操作如果没有事务进行控制的话,会造成很多不必要的损失。
+
+在Redis事物要用到的两个命令:
+
+- MULTI命令
+
+  首先在事物开始的时候,先发送`MULTI`命令给Redis,表示开始事物,然后再进行一些数据的操作.
+
+- EXEC命令 在操作全部完成后发送`EXEC`命令告诉Redis事物已经结束了,可以执行了
+
+在事务中间执行的命令都是已经保存在Reids中，但是没有被执行，直到收到`EXEC`命令，然后才会以此开始以此执行服务器中保存的命令。当中只要有一次命令执行失败了的话，其他的指定命令也会被撤销。执行原则就是“要么全部被执行成功，要么全部不执行”。
+
+在`Java`中使用`Jedis`操作事务:
+
+```java
+try {
+    Transaction tx = jedis.multi();
+    tx.zadd("qq", 2, "1");
+    tx.zadd("qq2", 3, "2");
+    List<Object> objs = tx.exec();
+    tx.close();
+} catch (Exception e) {
+	e.printStackTrace();
+} finally {}
+```
+
+
+
 - timeline
+
+顾名思义就是时间轴的意思，在sns网站中一般是要有互动的，然后就会有各种各样的个人时间轴时间或者是新鲜事。在大量用户会产生大量数据的情况下，对数据的储存我们需要合理地分配储存位置以及储存方式，让数据库性能最优化。
+
+数据储存方案:
+
+- 高热点数据放到Redis之类的非关系型数据库,便于高速读取
+- 用户言论等数据储存到关系型数据库,便于持久储存,安全性相对更高
+
+![timeline](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/timeline.png)
+
+消息推送方案:
+
+- 这里我们采用推拉的模式,活跃用户直接推送消息,不活跃用户采用拉取的方式,合理利用服务器资源
+
+![PushOrPull](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/PushOrPull.png)
+
 - 爬虫
+
+这里数据的读取采用 Python 进行爬取，主要是 Python 做一件事的代码量，前提是抛开别的因素。当我写第一个简单爬虫代码的时候我都惊讶到了，操作数据库短短两三行代码。非常的简洁，又有点自然语言的特点。采用的是`Pyspider`框架，包管理器使用`pip`,`IDE`用`IDEA`的兄弟`Pycharm`。
+
 - Solr全文搜索
+
+
+
 - 压力测试
+
+这里介绍的是一个阿帕奇下的一个开源工具`apache2-utils`,因为我是在`Ubuntu`系统下,直接从终端安装就好了
+
+```
+sudo apt-get install apache2-utils
+```
+
+然后直接在终端里面就可以打开，输入命令`ab `后面带参数`ab [options] [http[s]://]hostname[:port]/path` 就可以开始进行测试了，你可以随便输入下，然后就会有帮助出来，跟着帮助做做例子就知道怎么用了，不过这里需要注意的是网址的填写，填写简短的网址的话肯定运行不了的，网址最后面那个要带到来。
