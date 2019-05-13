@@ -28,7 +28,7 @@
 
 在[MailSender](https://github.com/zmosquito/wenda/blob/master/src/main/java/com/mosquito/util/MailSender.java)下，更改mail配置
 
-![Mail](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/wenda-mail.png)
+![Mail](https://github.com/zmosquito/wenda/blob/master/images/wenda-mail.png)
 
 - 数据库建立
 
@@ -64,17 +64,17 @@ spring.datasource.password=
 
 在IDEA中生成一个SpringBoot工程还是挺方便的,填入跟选择相对应的值直接一步步就可以了 
 
-![springbootProject](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/springbootProject.png)
+![springbootProject](https://github.com/zmosquito/wenda/blob/master/images/springbootProject.png)
 
-![projectProperties](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/projectProperties.png)
+![projectProperties](https://github.com/zmosquito/wenda/blob/master/images/projectProperties.png)
 
-![chooseDependencies](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/chooseDependencies.png)
+![chooseDependencies](https://github.com/zmosquito/wenda/blob/master/images/chooseDependencies.png)
 
 也可以选择官网的快速生成，然后导入IDEA就OK了
 
 [传送门](https://start.spring.io/)
 
-![createrWebSpringboot](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/createrWebSpringboot.png)
+![createrWebSpringboot](https://github.com/zmosquito/wenda/blob/master/images/createrWebSpringboot.png)
 
 - 登录与注册
 
@@ -97,13 +97,15 @@ spring.datasource.password=
 - 从根节点到某一节点,路径上经过的字符连接起来,为该节点对应的字符串
 - 每个节点的所有子节点包含的字符都不相同 
 
-![tree](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/tree.png)
+![tree](https://github.com/zmosquito/wenda/blob/master/images/tree.png)
 
 
 
 - 异步
 
 在当今互联网这种上网人群多，访问量大的情况下，异步编程提供了一个非堵塞的，基于事件驱动的编程模型。这种编程方式可以充分利用计算机的多核来同时执行并行任务，提高资源的利用效率。应用场景在我了解的也不多，可以想象应用场景是很广泛的。举个很简单的例子，我们在网站注册新的社交账号的话，严格一点的网站都是会有验证邮箱地址的邮件。这个就是一个异步的事件，你不可能说直接把邮件验证的流程嵌套在业务逻辑里面。应该是把这个事件发送给一个队列里面，然后队列专门处理这种事件。在一个网站中有各种各样的事情需要进行处理。
+
+![anyncQueue](https://github.com/zmosquito/wenda/blob/master/images/anyncQueue.png)
 
 简单设计流程:
 
@@ -421,13 +423,13 @@ try {
 - 高热点数据放到Redis之类的非关系型数据库,便于高速读取
 - 用户言论等数据储存到关系型数据库,便于持久储存,安全性相对更高
 
-![timeline](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/timeline.png)
+![timeline](https://github.com/zmosquito/wenda/blob/master/images/timeline.png)
 
 消息推送方案:
 
 - 这里我们采用推拉的模式,活跃用户直接推送消息,不活跃用户采用拉取的方式,合理利用服务器资源
 
-![PushOrPull](https://blogs-image.oss-cn-beijing.aliyuncs.com/wenda/PushOrPull.png)
+![PushOrPull](https://github.com/zmosquito/wenda/blob/master/images/PushOrPull.png)
 
 - 爬虫
 
