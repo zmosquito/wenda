@@ -437,7 +437,108 @@ try {
 
 - Solr全文搜索
 
+因为是在线问答平台，所以肯定会涉及到搜索问题等类似的功能，这里蚊子采取的是lucene的solr，solr采用lucene搜索库为核心，提供全文索引和搜索开源企业平台，提供REST的HTTP/XML和JSON的API。
 
+​	1.安装：
+
+在配置启动solr之前需要先安装jdk以及配置环境变量，然后进入[官网](<http://lucene.apache.org/solr/>)下载solr。
+
+​	2.中文分词：
+
+下载中文分词器(IK-Analyzer)：<https://code.google.com/archive/p/ik-analyzer/downloads>
+
+<https://gitee.com/wltea/IK-Analyzer-2012FF>
+
+IKAnanlyzer分词配置：
+
+managed-schema：
+
+```
+<field name="question_title" type="text_ik" indexed="true" stored="true" multiValued="true"/>
+<field name="question_content" type="text_ik" indexed="true" stored="true" multiValued="true"/>
+
+<fieldType name="text_ik" class="solr.TextField">
+<!--索引时候的分词器-->
+<analyzer type="index">
+<tokenizer class="org.wltea.analyzer.util.IKTokenizerFactory" useSmart=“false"/>
+<filter class="solr.LowerCaseFilterFactory"/>
+</analyzer>
+<!--查询时候的分词器-->
+<analyzer type="query">
+<tokenizer class="org.wltea.analyzer.util.IKTokenizerFactory" useSmart=“true"/>
+</analyzer>
+</fieldType>
+```
+
+数据库数据导入：
+
+solrconfig.xm
+
+```
+<requestHandler name="/dataimport" class="org.apache.solr.handler.dataimport.DataImportHandler">
+    <lst name="defaults">
+    	<str name="config">data-config.xml</str>
+    </lst>
+</requestHandler>
+
+```
+
+data-config.xml：
+
+```
+<dataConfig>
+    <dataSource type="JdbcDataSource"
+   		 		driver="com.mysql.jdbc.Driver"
+    			url="jdbc:mysql://localhost/wenda"
+    			user="root"
+    			password="nowcoder"/>
+    <document>
+    <entity name="question" query="select id,title,content from question">
+        <field column="content" name="question_content"/>
+        <field column="title" name="question_title"/>
+    </entity>
+    </document>
+</dataConfig>
+```
+
+数据库相关jar包导入，参考资料：http://wiki.apache.org/solr/DIHQuickStart
+
+IK-Analyzer（自己编译，pom打包带dic文件）:
+
+IKAnalyzer.java:
+
+```java
+public final class IKAnalyzer extends Analyzer{
+    /**
+    * 重载Analyzer接口，构造分词组件
+    */
+    @Override
+    protected TokenStreamComponents createComponents(String fieldName) {
+    	Tokenizer _IKTokenizer = new IKTokenizer(this.useSmart());
+    	return new TokenStreamComponents(_IKTokenizer);
+    }
+}
+```
+
+IKTokenizerFactory.java：
+
+```java
+public class IKTokenizerFactory extends TokenizerFactory {
+    private boolean useSmart;
+
+    public IKTokenizerFactory(Map<String, String> args) {
+        super(args);
+        useSmart = getBoolean(args, "useSmart", false);
+    }
+
+    public Tokenizer create(AttributeFactory attributeFactory) {
+        Tokenizer tokenizer = new IKTokenizer(useSmart);
+        return tokenizer;
+    }
+}
+```
+
+打包好之后，和mysql的jar一起放到solr安装的根目录下的 ext 文件夹下就好了。
 
 - 压力测试
 
